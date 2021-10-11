@@ -1,4 +1,4 @@
-FF = gfortran
+FF = ftn
 FFLAGS = -O4
 FLINK =
 
