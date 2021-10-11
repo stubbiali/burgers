@@ -1,3 +1,6 @@
 # module and object files
 *.mod 
 *.o
+
+# specific executables
+fortran/sequential/main
