@@ -6,4 +6,4 @@
 *.o
 
 # specific executables
-fortran/sequential/main
+fortran/**/main
