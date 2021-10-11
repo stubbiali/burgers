@@ -1,6 +1,5 @@
 program main
     use boundary, only: set_initial_conditions, apply_lateral_conditions
-    use omp_lib, only: omp_get_wtime
     use space, only: advection, diffusion
     use time, only: forward_euler
     use utils, only: copy_fields, print_field
@@ -8,7 +7,7 @@ program main
 
     ! control parameters
     real, parameter :: cfl = 0.1, nu = 0.1
-    integer, parameter :: factor = 4, nt = 100
+    integer, parameter :: factor = 8, nt = 100
     integer, parameter :: nx = 10 * (2 ** factor) + 1, ny = 10 * (2 ** factor) + 1
 
     ! derived parameters
@@ -16,7 +15,13 @@ program main
     integer :: i, j, nb, t
     real :: u(nx, ny), u1(nx, ny), u2(nx, ny), u3(nx, ny)
     real :: v(nx, ny), v1(nx, ny), v2(nx, ny), v3(nx, ny)
+
+    ! auxiliary variables for timing
+    integer :: count_start, count_finish
+    integer :: count_rate, count_max
     real :: start, finish
+
+    ! set derived parameters
     dx = 1.0 / (nx - 1)
     dy = 1.0 / (ny - 1)
     dt = cfl * (dx ** 2)
@@ -24,7 +29,6 @@ program main
 
     ! set initial conditions
     call set_initial_conditions(u3, v3)
-!    call print_field(u3)
 
     ! warm up cache
     call copy_fields(u3, v3, u, v)
@@ -35,7 +39,9 @@ program main
     call forward_euler(nu, 0.0, dx, dy, nb, u, v, u2, v2, u3, v3)
     call apply_lateral_conditions(nb, u3, v3)
 
-    call cpu_time(start)
+    ! start timer
+    call system_clock(count_start, count_rate, count_max)
+
     do t = 1, nt
         ! copy new fields into old fields
         call copy_fields(u3, v3, u, v)
@@ -51,11 +57,16 @@ program main
         ! third step
         call forward_euler(nu, dt, dx, dy, nb, u, v, u2, v2, u3, v3)
         call apply_lateral_conditions(nb, u3, v3)
-
-        ! print *, "Iteration ", t
     end do
-    call cpu_time(finish)
 
-    print *, "max(u) = ", maxval(u3), "min(u) = ", minval(u3)
+    ! stop timer
+    call system_clock(count_finish, count_rate, count_max)
+
+    ! compute elapsed time
+    start = count_start * 1.0 / count_rate
+    finish = count_finish * 1.0 / count_rate
+
+    ! print summary
+    print *, "Validation: max(u) = ", maxval(u3), ", min(u) = ", minval(u3)
     print *, "Run time: ",finish - start," seconds"
 end program main

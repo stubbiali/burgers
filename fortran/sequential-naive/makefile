@@ -1,5 +1,5 @@
-FF = gfortran
-FFLAGS = -O3
+FF = ftn
+FFLAGS = -O4
 FLINK =
 
 SRC_DIR = src
