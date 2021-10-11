@@ -1,3 +1,6 @@
+# IDE-related stuff
+.idea/
+
 # module and object files
 *.mod 
 *.o
