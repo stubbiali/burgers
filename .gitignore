@@ -1,2 +1,3 @@
 # module and object files
-*.mod *.o
+*.mod 
+*.o
