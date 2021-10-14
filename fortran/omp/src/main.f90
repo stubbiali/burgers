@@ -69,5 +69,5 @@ program main
 
     ! print summary
     print *, "Validation: max(u) = ", maxval(u3), ", min(u) = ", minval(u3)
-    print *, "Run time: ",finish - start," seconds"
+    print *, "Run time: ", finish - start, " seconds"
 end program main
