@@ -30,17 +30,26 @@ contains
         integer, intent(in) :: nb
         real, intent(out) :: u(:, :), v(:, :)
 
-        integer :: nx, ny
+        integer :: i, j, nx, ny
+
         nx = size(u, 1)
         ny = size(u, 2)
-
-        u(1:nb, :) = 1.0
-        u(nx - nb + 1:nx, :) = 1.0
-        u(nb + 1:nx - nb, 1:nb) = 1.0
-        u(nb + 1:nx - nb, ny - nb + 1:ny) = 1.0
-        v(1:nb, :) = 1.0
-        v(nx - nb + 1:nx, :) = 1.0
-        v(nb + 1:nx - nb, 1:nb) = 1.0
-        v(nb + 1:nx - nb, ny - nb + 1:ny) = 1.0
+        do j = 1, ny
+            if ((j <= nb) .or. (j > ny - nb)) then
+                do i = 1, nx
+                    u(i, j) = 1.0
+                    v(i, j) = 1.0
+                end do
+            else
+                do i = 1, nb
+                    u(i, j) = 1.0
+                    v(i, j) = 1.0
+                end do
+                do i = nx - nb + 1, nx
+                    u(i, j) = 1.0
+                    v(i, j) = 1.0
+                end do
+            end if
+        end do
     end subroutine apply_lateral_conditions
 end module boundary
