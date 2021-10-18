@@ -7,3 +7,14 @@
 
 # specific executables
 fortran/**/main
+
+# virtual environment
+venv/
+
+# cache
+__pycache__/
+**gt_cache/
+.dace.conf
+
+# varia
+.python-version
