@@ -1,0 +1,7 @@
+click
+cupy
+ipdb
+gt4py@git+https://github.com/GridTools/gt4py.git@a7a34469c23c5cf3947994df8b9e50186cd63b27
+matplotlib
+numpy
+sympl@git+https://github.com/stubbiali/sympl.git@ed910243fabfe82b88d7bc234e07771741f94b45
